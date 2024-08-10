@@ -25,7 +25,18 @@ public class BankAccount extends BaseTimeEntity {
     private BankType bankType;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private BankAccountType bankAccountType;
+
+    public BankAccount addMoney(Integer money) {
+        this.money += money;
+        return this;
+    }
+
+    public BankAccount subtractMoney(Integer money) {
+        this.money -= money;
+        return this;
+    }
 
     @Builder
     public BankAccount(String id, String userId, Integer money, Integer accountNumber, String bankType, String bankAccountType) {

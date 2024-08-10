@@ -2,9 +2,11 @@ package kr.junction.delavery.controller;
 
 import kr.junction.delavery.api.BankAccountApi;
 import kr.junction.delavery.controller.dto.request.BankAccountCreateRequest;
+import kr.junction.delavery.controller.dto.request.BankAccountMoneyRequest;
 import kr.junction.delavery.controller.dto.response.BankAccountResponse;
 import kr.junction.delavery.domain.BankAccount;
 import kr.junction.delavery.service.BankAccountService;
+import kr.junction.delavery.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class BankAccountController implements BankAccountApi {
 
     private final BankAccountService bankAccountService;
+    private final UserService userService;
 
     @Override
     public BankAccountResponse createNewBankAccount(
@@ -23,10 +26,13 @@ public class BankAccountController implements BankAccountApi {
                 request.accountNumber(),
                 request.bankAccountType(),
                 request.bankType(),
+                request.money(),
                 memberId
         );
 
-        return BankAccountResponse.of(bankAccount);
+        String userName = userService.getUserName(memberId);
+
+        return BankAccountResponse.of(bankAccount, userName);
     }
 
     @Override
@@ -35,33 +41,43 @@ public class BankAccountController implements BankAccountApi {
             String type
     ) {
         BankAccount bankAccount = bankAccountService.getBankAccount(
-                type,
+                type.toUpperCase(),
                 memberId
         );
 
-        return BankAccountResponse.of(bankAccount);
+        String userName = userService.getUserName(memberId);
+
+        return BankAccountResponse.of(bankAccount, userName);
     }
 
     @Override
     public BankAccountResponse transferToBankAccount(
-            String memberId
+            String memberId,
+            BankAccountMoneyRequest request
     ) {
         BankAccount bankAccount = bankAccountService.transferToBankAccount(
-                memberId
+                memberId,
+                request.money()
         );
 
-        return BankAccountResponse.of(bankAccount);
+        String userName = userService.getUserName(memberId);
+
+        return BankAccountResponse.of(bankAccount, userName);
     }
 
     @Override
     public BankAccountResponse withdrawalToBankAccount(
-            String memberId
+            String memberId,
+            BankAccountMoneyRequest request
     ) {
         BankAccount bankAccount = bankAccountService.withdrawalToBankAccount(
-                memberId
+                memberId,
+                request.money()
         );
 
-        return BankAccountResponse.of(bankAccount);
+        String userName = userService.getUserName(memberId);
+
+        return BankAccountResponse.of(bankAccount, userName);
     }
 
 }

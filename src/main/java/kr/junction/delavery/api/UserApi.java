@@ -1,6 +1,7 @@
 package kr.junction.delavery.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.junction.delavery.common.annotation.RequestUserId;
 import kr.junction.delavery.controller.dto.request.UserCreateRequest;
@@ -17,13 +18,13 @@ public interface UserApi {
     @Operation(summary = "사용자 생성(가입)")
     @PostMapping
     UserResponse createNewUser(
-            @RequestBody UserCreateRequest request
+            @RequestBody @Parameter(hidden = true) UserCreateRequest request
     );
 
     @Operation(summary = "사용자 삭제(탈퇴)")
     @DeleteMapping
     Void deleteUser(
-            @RequestUserId String memberId
+            @RequestUserId @Parameter(hidden = true) String memberId
     );
 
 }

@@ -19,6 +19,7 @@ public class UserService implements UserUseCase {
     public User createNewUser(String name) {
         return userRepository.save(
                 User.builder()
+                        .id(IdGenerator.generate())
                         .name(name)
                         .build()
         );

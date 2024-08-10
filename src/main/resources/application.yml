@@ -7,9 +7,9 @@ spring:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/delavery?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-    username: root
-    password: 3615
+    url: ENC(wyQIrNKF+gkw8ep7o/JkxmCHaCJdxNi3L+tT/lKEZoMYLvFY2bGEsZ+9zclgC3SUcd9zqCQxLwt4LyOqqAeYw+/EuN1VGXE0vWEhFzk2jKI=)
+    username: ENC(L61mKomowHTul27NO8zZcZvg54uU5nIR)
+    password: ENC(l9VVf5i7W1aW0WRbYk6jAGtqoBlzO6N/)
 
   flyway:
     enabled: true

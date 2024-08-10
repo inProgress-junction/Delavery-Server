@@ -33,4 +33,9 @@ public class UserService implements UserUseCase {
 
         return null;
     }
+
+    @Override
+    public String getUserName(String userId) {
+        return userRepository.findById(userId).orElseThrow().getName();
+    }
 }

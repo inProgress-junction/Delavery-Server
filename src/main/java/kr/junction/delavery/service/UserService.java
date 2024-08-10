@@ -1,5 +1,7 @@
 package kr.junction.delavery.service;
 
+import jakarta.transaction.Transactional;
+import kr.junction.delavery.common.util.IdGenerator;
 import kr.junction.delavery.domain.User;
 import kr.junction.delavery.repository.UserRepository;
 import kr.junction.delavery.service.usecase.UserUseCase;
@@ -13,6 +15,7 @@ public class UserService implements UserUseCase {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public User createNewUser(String name) {
         return userRepository.save(
                 User.builder()
@@ -22,6 +25,7 @@ public class UserService implements UserUseCase {
     }
 
     @Override
+    @Transactional
     public Void deleteUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow();
         userRepository.delete(user);

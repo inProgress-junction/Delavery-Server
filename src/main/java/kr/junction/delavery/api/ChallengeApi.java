@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/challenges")
 public interface ChallengeApi {
 
-    @Operation(summary = "챌린지 조회")
-    @GetMapping
+    @Operation(summary = "챌린지 백분위 조회")
+    @GetMapping("/percentile")
     PercentileResponse getChallengePercentile(
             @RequestUserId String memberId
     );

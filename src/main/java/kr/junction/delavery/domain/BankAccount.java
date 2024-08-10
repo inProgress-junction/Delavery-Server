@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class BankAccount extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String userId;
@@ -29,7 +28,8 @@ public class BankAccount extends BaseTimeEntity {
     private BankAccountType bankAccountType;
 
     @Builder
-    public BankAccount(String userId, Integer money, Integer accountNumber, BankType bankType, BankAccountType bankAccountType) {
+    public BankAccount(String id, String userId, Integer money, Integer accountNumber, BankType bankType, BankAccountType bankAccountType) {
+        this.id = id;
         this.userId = userId;
         this.money = money;
         this.accountNumber = accountNumber;

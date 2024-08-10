@@ -29,4 +29,16 @@ public class Challenge extends BaseTimeEntity {
         this.unlockTrialCount = unlockTrialCount;
         this.unlockDoneCount = unlockDoneCount;
     }
+
+    // add method
+    public Integer addUnlockTrialCount() {
+        this.unlockTrialCount++;
+        return unlockTrialCount;
+    }
+
+    // add method
+    public Integer addUnlockDoneCount() {
+        this.unlockDoneCount++;
+        return unlockDoneCount;
+    }
 }

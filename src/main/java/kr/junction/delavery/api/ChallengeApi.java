@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.junction.delavery.common.annotation.RequestUserId;
 import kr.junction.delavery.controller.dto.response.ChallengeResponse;
+import kr.junction.delavery.controller.dto.response.PercentileResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/challenges")
 public interface ChallengeApi {
 
-    @Operation(summary = "챌린지 조회")
-    @GetMapping
-    ChallengeResponse getChallenge(
+    @Operation(summary = "챌린지 백분위 조회")
+    @GetMapping("/percentile")
+    PercentileResponse getChallengePercentile(
             @RequestUserId String memberId
     );
 

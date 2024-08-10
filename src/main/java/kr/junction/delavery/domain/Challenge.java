@@ -1,8 +1,6 @@
 package kr.junction.delavery.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import kr.junction.delavery.common.base.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -16,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class Challenge extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String userId;
@@ -26,7 +23,8 @@ public class Challenge extends BaseTimeEntity {
     private Integer unlockDoneCount;
 
     @Builder
-    public Challenge(String userId, Integer unlockTrialCount, Integer unlockDoneCount) {
+    public Challenge(String id, String userId, Integer unlockTrialCount, Integer unlockDoneCount) {
+        this.id = id;
         this.userId = userId;
         this.unlockTrialCount = unlockTrialCount;
         this.unlockDoneCount = unlockDoneCount;

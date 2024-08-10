@@ -28,13 +28,13 @@ public class BankAccount extends BaseTimeEntity {
     private BankAccountType bankAccountType;
 
     @Builder
-    public BankAccount(String id, String userId, Integer money, Integer accountNumber, BankType bankType, BankAccountType bankAccountType) {
+    public BankAccount(String id, String userId, Integer money, Integer accountNumber, String bankType, String bankAccountType) {
         this.id = id;
         this.userId = userId;
         this.money = money;
         this.accountNumber = accountNumber;
-        this.bankType = bankType;
-        this.bankAccountType = bankAccountType;
+        this.bankType = BankType.valueOf(bankType);
+        this.bankAccountType = BankAccountType.valueOf(bankAccountType);
     }
 
 }

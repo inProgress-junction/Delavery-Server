@@ -14,7 +14,14 @@ public class BankAccountService implements BankAccountUseCase {
 
     @Override
     public BankAccount createNewBankAccount(Integer accountNumber, String bankAccountType, String bankType, String memberId) {
-        return null;
+        return bankAccountRepository.save(
+                BankAccount.builder()
+                        .accountNumber(accountNumber)
+                        .bankAccountType(bankAccountType)
+                        .bankType(bankType)
+                        .userId(memberId)
+                        .build()
+        );
     }
 
     @Override

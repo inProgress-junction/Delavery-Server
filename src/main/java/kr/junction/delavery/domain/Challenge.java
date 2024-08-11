@@ -23,11 +23,11 @@ public class Challenge extends BaseTimeEntity {
     private Integer unlockDoneCount;
 
     @Builder
-    public Challenge(String id, String userId, Integer unlockTrialCount, Integer unlockDoneCount) {
+    public Challenge(String id, String userId) {
         this.id = id;
         this.userId = userId;
-        this.unlockTrialCount = unlockTrialCount;
-        this.unlockDoneCount = unlockDoneCount;
+        this.unlockTrialCount = 0;
+        this.unlockDoneCount = 0;
     }
 
     // add method

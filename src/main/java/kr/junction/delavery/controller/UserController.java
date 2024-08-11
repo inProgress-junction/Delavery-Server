@@ -4,6 +4,7 @@ import kr.junction.delavery.api.UserApi;
 import kr.junction.delavery.controller.dto.request.UserCreateRequest;
 import kr.junction.delavery.controller.dto.response.UserResponse;
 import kr.junction.delavery.domain.User;
+import kr.junction.delavery.service.ChallengeService;
 import kr.junction.delavery.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController implements UserApi {
 
     private final UserService userService;
+    private final ChallengeService challengeService;
 
     @Override
     public UserResponse createNewUser(
             UserCreateRequest request
     ) {
         User newUser = userService.createNewUser(request.name());
+        challengeService.createChallenge(newUser.getId());
 
         return UserResponse.of(newUser);
     }

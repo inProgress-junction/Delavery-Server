@@ -1,6 +1,5 @@
 package kr.junction.delavery.service;
 
-import jakarta.transaction.Transactional;
 import kr.junction.delavery.common.util.IdGenerator;
 import kr.junction.delavery.domain.BankAccount;
 import kr.junction.delavery.domain.BankAccountType;
@@ -9,9 +8,9 @@ import kr.junction.delavery.repository.BankAccountRepository;
 import kr.junction.delavery.service.usecase.BankAccountUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static kr.junction.delavery.domain.BankAccountType.SAVING;
 import static kr.junction.delavery.domain.BankAccountType.SPENDING;
@@ -25,6 +24,16 @@ public class BankAccountService implements BankAccountUseCase {
     @Override
     @Transactional
     public BankAccount createNewBankAccount(Integer accountNumber, String bankAccountType, String bankType, Integer money, String memberId) {
+
+        boolean accountExists = bankAccountRepository.findBankAccountByUserIdAndBankAccountType(
+                memberId,
+                BankAccountType.valueOf(bankAccountType)
+        ).isPresent();
+
+        if (accountExists) {
+            throw new IllegalArgumentException("이미 해당하는 계좌를 생성한 사용자입니다!");
+        }
+
         return bankAccountRepository.save(
                 BankAccount.builder()
                         .id(IdGenerator.generate())
@@ -38,10 +47,11 @@ public class BankAccountService implements BankAccountUseCase {
     }
 
     @Override
-    public BankAccount getBankAccount(String type, String memberId) {
+    @Transactional(readOnly = true)
+    public BankAccount getBankAccount(String bankAccountType, String memberId) {
         return bankAccountRepository.findBankAccountByUserIdAndBankAccountType(
                 memberId,
-                BankAccountType.valueOf(type)
+                BankAccountType.valueOf(bankAccountType)
         ).orElseThrow();
     }
 
@@ -50,6 +60,10 @@ public class BankAccountService implements BankAccountUseCase {
     public BankAccount transferToBankAccount(String memberId, Integer money) {
         BankAccount spendingAccount = bankAccountRepository.findBankAccountByUserIdAndBankAccountType(memberId, SPENDING).orElseThrow();
         BankAccount savingAccount = bankAccountRepository.findBankAccountByUserIdAndBankAccountType(memberId, SAVING).orElseThrow();
+
+        if (spendingAccount.getMoney() < money) {
+            throw new IllegalArgumentException("계좌의 돈이 부족하여 해당 금액은 저축이 불가능합니다!");
+        }
 
         spendingAccount.subtractMoney(money);
         savingAccount.addMoney(money);
@@ -63,6 +77,10 @@ public class BankAccountService implements BankAccountUseCase {
     @Transactional
     public BankAccount withdrawalToBankAccount(String memberId, Integer money) {
         BankAccount savingAccount = bankAccountRepository.findBankAccountByUserIdAndBankAccountType(memberId, SAVING).orElseThrow();
+
+        if (savingAccount.getMoney() < money) {
+            throw new IllegalArgumentException("계좌의 돈이 부족하여 해당 금액은 출금이 불가능합니다!");
+        }
 
         return bankAccountRepository.save(
                 savingAccount.subtractMoney(money)

@@ -1,12 +1,12 @@
 package kr.junction.delavery.service;
 
-import jakarta.transaction.Transactional;
 import kr.junction.delavery.common.util.IdGenerator;
 import kr.junction.delavery.domain.User;
 import kr.junction.delavery.repository.UserRepository;
 import kr.junction.delavery.service.usecase.UserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +35,7 @@ public class UserService implements UserUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String getUserName(String userId) {
         return userRepository.findById(userId).orElseThrow().getName();
     }

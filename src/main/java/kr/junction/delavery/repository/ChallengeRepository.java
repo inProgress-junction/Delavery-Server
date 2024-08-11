@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ChallengeRepository extends JpaRepository<Challenge, String> {
-
     Optional<Challenge> findByUserId(String userId);
 }

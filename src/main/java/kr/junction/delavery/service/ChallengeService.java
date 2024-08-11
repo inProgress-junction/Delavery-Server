@@ -5,6 +5,7 @@ import kr.junction.delavery.domain.Challenge;
 import kr.junction.delavery.repository.ChallengeRepository;
 import kr.junction.delavery.service.usecase.ChallengeUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ public class ChallengeService implements ChallengeUseCase {
 
     @Override
     @Transactional
-    public Challenge createChallenge(String memberId) {
+    public Challenge createNewChallenge(String memberId) {
         return challengeRepository.save(
                 Challenge.builder()
                         .id(IdGenerator.generate())
@@ -29,7 +30,7 @@ public class ChallengeService implements ChallengeUseCase {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Double getChallengePercentile(String memberId) {
         Challenge userChallenge = challengeRepository.findByUserId(memberId).orElseThrow();
 
@@ -56,23 +57,39 @@ public class ChallengeService implements ChallengeUseCase {
     }
 
     @Override
+    @Transactional
     public Challenge updateUnlockTrialCount(String memberId) {
-
         Challenge challenge = challengeRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("해당하는 challenge가 없습니다."));
-        challenge.addUnlockTrialCount();
-        challengeRepository.save(challenge);
+
+        challengeRepository.save(
+                challenge.addUnlockTrialCount()
+        );
 
         return challenge;
     }
 
     @Override
+    @Transactional
     public Challenge updateUnlockDoneCount(String memberId) {
         Challenge challenge = challengeRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("해당하는 challenge가 없습니다."));
-        challenge.addUnlockDoneCount();
-        challengeRepository.save(challenge);
+
+        challengeRepository.save(
+                challenge.addUnlockDoneCount()
+        );
 
         return challenge;
     }
+
+    @Scheduled(fixedRate = 604800000) // 7일
+    @Transactional
+    public void autoResetChallenge() {
+        List<Challenge> allChallenges = challengeRepository.findAll();
+        for (Challenge challenge : allChallenges) {
+            challenge.resetUnlockCounts();
+        }
+        challengeRepository.saveAll(allChallenges);
+    }
+
 }

@@ -27,7 +27,7 @@ public interface BankAccountApi {
             @RequestParam String type
     );
 
-    @Operation(summary = "저금하기")
+    @Operation(summary = "저축하기")
     @PostMapping("/transfer")
     BankAccountResponse transferToBankAccount(
             @RequestUserId @Parameter(hidden = true) String memberId,

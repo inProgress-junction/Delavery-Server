@@ -21,7 +21,7 @@ public class UserController implements UserApi {
             UserCreateRequest request
     ) {
         User newUser = userService.createNewUser(request.name());
-        challengeService.createChallenge(newUser.getId());
+        challengeService.createNewChallenge(newUser.getId());
 
         return UserResponse.of(newUser);
     }
